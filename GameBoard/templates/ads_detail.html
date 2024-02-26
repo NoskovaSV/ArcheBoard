@@ -1,0 +1,28 @@
+{%extends 'ads.html'%}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Объявление</title>
+</head>
+<body>
+{% block content %}
+    <h1>{{ ad }}</h1>
+    <table>
+        <tr>
+            <td><u>Автор</u></td>
+            <td><u>Заголовок</u></td>
+            <td><u>Содержание</u></td>
+            <td><u>Дата публикации</u></td>
+            <td><u>Категория</u></td>
+        </tr>
+        <tr>
+            <td>{{ ad.user }}</td>
+            <td>{{ ad.title }}</td>
+            <td>{{ ad.content|safe}}</td>
+            <td>{{ ad.creation_date|date:'d M Y' }}</td>
+            <td>{{ ad.categories }}</td>
+        </tr>
+    </table>
+    {% endblock content %}
+</body>
+</html>

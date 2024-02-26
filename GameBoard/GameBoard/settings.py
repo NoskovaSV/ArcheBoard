@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-4um2gg^lx3u2k50&pytwq_@96y-fe=_^+f#9qxm$6+(i4(iv^i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -37,10 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
     'board',
     'ckeditor',
     'ckeditor_uploader',
+    'django_filters',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'django_apscheduler',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'GameBoard.urls'
@@ -58,7 +66,7 @@ ROOT_URLCONF = 'GameBoard.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +77,11 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 WSGI_APPLICATION = 'GameBoard.wsgi.application'
@@ -123,6 +136,14 @@ STATIC_URL = 'static/'
 STATIC_DIR=os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS=[STATIC_DIR]
 #STATIC_ROOT=os.path.join(BASE_DIR, 'static')
+
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+
+
+SITE_ID = 1
+
 
 
 # Default primary key field type
@@ -199,3 +220,23 @@ CKEDITOR_CONFIGS = {
     }
 }
 
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ACCOUNT_FORMS = {'signup': 'board.forms.BasicSignupForm'}
+
+EMAIL_HOST ='smtp.yandex.ru'
+EMAIL_PORT= 465
+EMAIL_HOST_USER= os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD= os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_SSL=True
+DEFAULT_FROM_EMAIL= os.getenv('DEFAULT_FROM_EMAIL')
+
+EMAIL_BACKEND= 'django.core.mail.backends.smtp.EmailBackend'
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+
+APSCHEDULER_RUN_NOW_TIMEOUT = 25

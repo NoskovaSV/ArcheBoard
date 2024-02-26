@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Доска объявлений</title>
+    <style>
+   body {
+    background: green;
+    color: #fff;
+   }
+    table {
+    width: 100%;
+    background: green;
+    color: black;
+    border-spacing: 10px;
+    text-align: justify;
+   }
+   td, th {
+    background: #c0db48;
+    padding: 55px;
+   }
+  </style>
+</head>
+{% block content %}
+<header>
+        <a href="#">Главная</a>
+        <a href="create/">Создание объявлений</a>
+        <a href="privatepage/">Личный кабинет</a>
+    </header>
+    <h1 align="center"><strong>ДОСКА ОБЪЯВЛЕНИЙ MMORPG ArcheAge</strong></h1>
+
+    <table>
+        <tr>
+            <td><u>Пользователь</u></td>
+            <td><u>Заголовок</u></td>
+            <td><u>Дата публикации</u></td>
+            <td><u>Содержание</u></td>
+            <td><u>Категория</u></td>
+        </tr>
+        {% for ad in ads %}
+        <tr>
+            <td>{{ ad.user }}</td>
+            <td>{{ ad.title}}</td>
+            <td>{{ ad.creation_date|date:'d M Y' }}</td>
+            <td>{{ ad.content|safe  }}</td>
+            <td>{{ ad.categories }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {{ page_obj.number }}
+
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+    {% endblock content %}
+</body>
+</html>
